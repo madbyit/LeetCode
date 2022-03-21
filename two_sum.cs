@@ -1,6 +1,6 @@
 using System;
 
-namespace Test
+namespace LeetCode
 {
 
     public class Solution
@@ -23,6 +23,7 @@ namespace Test
                             solution[0] = i;
                             solution[1] = j;
                             isTarget = true;
+                            break;
                         }
                     }
 
