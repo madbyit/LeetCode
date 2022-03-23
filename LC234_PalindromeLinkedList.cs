@@ -13,8 +13,8 @@ namespace LeetCode
         /// <summary>
         /// Design function using three APIs
         /// 1. get length of linked list
-        /// 2. reverse linked list
-        /// 3. get nmbr:th/other half of linked list node
+        /// 2. get nmbr:th/other half of linked list node
+        /// 3. reverse linked list
         /// 4. compare
         /// </summary>
         /// <param name="head"></param>
@@ -34,26 +34,26 @@ namespace LeetCode
 
             //Is it even or odd list length
             bool isEven = length % 2 == 0;
-            Console.WriteLine("EVEN = " + isEven);
 
             /*Split linked list in two parts*/
-            
-            //Set front part
-            var front = GetNodeGivenNmbr(head, length/ 2);
+
+            // 2.
+            //Set left part
+            var partOne = head;
+
+            //Set right part on second half
+            var partTwo = GetNodeGivenNmbr(head, length/ 2);
             //If not even, get next node 
             if (!isEven)
-            {
-                front = front.next;
-            }
-
-            //Set back part
-            var back = head;
-
+                partTwo = partTwo.next;
+            
+            // 3.
             //Get reversed list of the front part
-            var reversed = ReverseLinkedList(front);
-
+            var reversedPartTwo = ReverseLinkedList(partTwo);
+  
+            // 4.
             //Compare the two linked list
-            result = Compare(reversed, back, length);        
+            result = Compare(partOne, reversedPartTwo, length);        
             
             return result;
         }
@@ -81,13 +81,13 @@ namespace LeetCode
             int length = 0;
             var iterate = head;
 
+            // Iterate through linked list to get lenght
             do
             {
                 length++;
                 iterate = iterate.next;
             }while(iterate != null);
 
-            Console.WriteLine("LENGTH: " + length);
             return length;
         }
 
@@ -116,42 +116,42 @@ namespace LeetCode
 
 
         // 3. Iterate through the other side linked list node
-        private ListNode GetNodeGivenNmbr(ListNode head, int nmbr)
+        private ListNode GetNodeGivenNmbr(ListNode head, int half_length)
         {
-            if (nmbr == 0)
+            if (half_length == 0)
                 return head;
 
             int index = 0;
-            var iterate = head;
 
+            //Iterate through part2
+            var iterateForPartTwo = head;
             do
             {
-                iterate = iterate.next;
+                iterateForPartTwo = iterateForPartTwo.next;
                 index++;
-            }while(index < nmbr);
+            }while(index < half_length);
 
-            return iterate;
+            return iterateForPartTwo;
         }
 
         // 4. Compare two linked list, one element at time 
-        private bool Compare(ListNode reversed, ListNode back, int length)
+        private bool Compare(ListNode partOne, ListNode reversedPartTwo, int length)
         {
             bool isPalindrom = true;
             
             var index = 0;
             while (index < length / 2)
             {
-                if (back.val != reversed.val)
+                if (partOne.val != reversedPartTwo.val)
                     isPalindrom = false;
 
-                back = back.next;
-                reversed = reversed.next;
+                partOne = partOne.next;
+                reversedPartTwo = reversedPartTwo.next;
                 index++;
             }
 
             return isPalindrom;
         }
-
 
         static void Main(string[] args)
         {
@@ -160,12 +160,16 @@ namespace LeetCode
             //Build up the linked list with each nodes
             var head = new ListNode(1); //node1 = head
             var node2 = new ListNode(2);
-            var node3 = new ListNode(2);
+            var node3 = new ListNode(3);
             var node4 = new ListNode(3);
+            var node5 = new ListNode(2);
+            var node6 = new ListNode(1);
 
             head.next = node2;
             node2.next = node3;
             node3.next = node4;
+            node4.next = node5;
+            node5.next = node6;
 
             Console.WriteLine("IsPalindrom: " + s.IsPalindrome(head));
         }
